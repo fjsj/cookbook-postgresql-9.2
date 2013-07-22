@@ -49,10 +49,14 @@ when "ubuntu"
   when node['platform_version'].to_f <= 11.04
     default['postgresql']['version'] = "8.4"
   else
-    default['postgresql']['version'] = "9.1"
+    default['postgresql']['version'] = "9.2"
   end
 
   default['postgresql']['dir'] = "/etc/postgresql/#{node['postgresql']['version']}/main"
+  if node['platform_version'].to_f > 11.04
+    default['postgresql']['dir'] = "/var/lib/postgresql/9.2/main"
+  end 
+
   case
   when (node['platform_version'].to_f <= 10.04) && (! node['postgresql']['enable_pgdg_apt'])
     default['postgresql']['server']['service_name'] = "postgresql-#{node['postgresql']['version']}"
